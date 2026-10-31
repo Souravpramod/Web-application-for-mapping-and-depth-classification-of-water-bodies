@@ -1,0 +1,99 @@
+# Freebuff Desktop project marker
+.freebuff/
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+venv*/
+env/
+ENV/
+back_end/.venv/
+lakeenv/
+myenv/
+newyolo/
+wbyoloenv/
+yolo_env/
+
+# Local secrets and environment files
+.env
+.env.*
+!.env.example
+
+# IDE/editor and operating-system files
+.vscode/
+.idea/
+.spyderproject/
+.spyproject/
+.DS_Store
+Thumbs.db
+
+# Logs, temporary files, backups, and build artifacts
+*.log
+*.tmp
+*.bak
+*.old
+*.swp
+*.swo
+*.orig
+*.zip
+.coverage
+.coverage.*
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# User uploads, generated results, and local-only review material
+uploads/
+outputs/
+_review/
+.backup/
+
+# Training datasets and generated YOLO results
+runs/
+_review/**/runs/
+_review/**/water_bodies/
+_review/**/water_segmentation.v1i.coco-segmentation/
+_review/**/water_segmentation.v1i.yolov8/
+_review/**/water\ segmentation.v1i.yolov8/
+water_bodies/
+water_segmentation.v1i.coco-segmentation/
+water_segmentation.v1i.yolov8/
+water\ segmentation.v1i.yolov8/
+
+# Ignore ML artifacts globally; the four inference assets under models/ are exempted below.
+*.pt
+*.h5
+*.pkl
+*.onnx
+*.engine
+*.tflite
+*.pb
+*.weights
+*.cache
+_review/**/*.jpg
+_review/**/*.jpeg
+_review/**/*.png
+_review/**/*.pt
+_review/**/*.pkl
+_review/**/*.h5
+_review/**/*.zip
+_review/**/*.pyc
+_review/**/*.cache
+_review/**/.DS_Store
+
+# Include only the four inference artifacts needed at runtime.
+!models/*.pt
+!models/*.h5
+!models/*.pkl
+
+# Notebook checkpoints
+.ipynb_checkpoints/

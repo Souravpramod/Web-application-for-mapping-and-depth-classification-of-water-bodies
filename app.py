@@ -12,11 +12,25 @@ from tensorflow.keras.models import load_model
 import joblib
 import os
 import datetime
+from pathlib import Path
 import pandas as pd
 import plotly.express as px
+from dotenv import load_dotenv
 
-# Google API Key (hardcoded)
-API_KEY = "AIzaSyCyFgbJ3ECkERB3AgDWJQF6qFlIA0B7gw8"  # Replace with your actual API key
+load_dotenv()
+
+# Model files can be overridden for local installations; defaults use the repository layout.
+PROJECT_ROOT = Path(__file__).resolve().parent
+def model_path(variable, filename):
+    path = Path(os.getenv(variable, str(PROJECT_ROOT / "models" / filename))).expanduser()
+    return path if path.is_absolute() else PROJECT_ROOT / path
+
+
+YOLO_MODEL_PATH = model_path("YOLO_MODEL_PATH", "water_segmentation.pt")
+DEPTH_MODEL_PATH = model_path("DEPTH_MODEL_PATH", "depth_classifier.h5")
+SCALER_PATH = model_path("SCALER_PATH", "scaler.pkl")
+ENCODER_PATH = model_path("ENCODER_PATH", "encoder.pkl")
+GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY", "")
 
 # Define pixel-to-meter conversion scale (Adjust as per real-world data)
 PIXEL_TO_METER_SCALE = 0.5
@@ -31,11 +45,11 @@ except Exception as e:
 @st.cache_resource
 def load_models():
     try:
-        # Use absolute paths that work for your system
-        depth_model = load_model(r"C:\Users\USER\Documents\model\model_depth.h5", compile=False)
-        yolo_model = YOLO(r"C:\Users\USER\Documents\model\runs\segment\train20\weights\best.pt").to("cpu")
-        scaler = joblib.load(r"C:\Users\USER\Documents\model\scaler.pkl")
-        encoder = joblib.load(r"C:\Users\USER\Documents\model\encoder.pkl")
+        # Load models from configured paths.
+        depth_model = load_model(str(DEPTH_MODEL_PATH), compile=False)
+        yolo_model = YOLO(str(YOLO_MODEL_PATH)).to("cpu")
+        scaler = joblib.load(SCALER_PATH)
+        encoder = joblib.load(ENCODER_PATH)
         return depth_model, yolo_model, scaler, encoder
     except Exception as e:
         st.error(f"Error loading models: {e}")
@@ -47,7 +61,7 @@ def load_models():
 @st.cache_data(ttl=3600)
 def get_lake_coordinates(lake_name):
     try:
-        search_url = f"https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={lake_name}&inputtype=textquery&fields=geometry,name&key={API_KEY}"
+        search_url = f"https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={lake_name}&inputtype=textquery&fields=geometry,name&key={GOOGLE_MAPS_API_KEY}"
         response = requests.get(search_url).json()
         
         if "candidates" in response and response["candidates"]:
