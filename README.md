@@ -56,9 +56,7 @@ Google Earth Engine ──► satellite image (per year)
 │   └── encoder.pkl
 ├── data/
 │   └── sample_water.jpg # Sample satellite image for the "Upload Image" mode
-└── docs/
-    ├── project-inventory.md
-    └── cleanup-plan.md
+
 ```
 
 > Local virtual-environment folders (`venv/`, `myenv/`, `lakeenv/`, `yolo_env/`, `.venv/`, etc.) are **not** part of the project and must not be committed. They are excluded via `.gitignore`.
